@@ -1,0 +1,57 @@
+@page "/error/{responseCode:int?}"
+@using System.Diagnostics
+@inject IWebHostEnvironment Environment;
+
+<PageTitle>Fehler @ResponseCode</PageTitle>
+
+@if (ResponseCode == 404)
+{
+    <Error404 />
+}
+
+<div class="account-pages my-5 pt-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-center mb-5">
+                    <h1 class="display-2 fw-medium">Fehler @ResponseCode</h1>
+                    <h4 class="text-uppercase">Sorry, es ist ein Fehler aufgetreten</h4>
+                    <div class="mt-5 text-center">
+                        <a class="btn btn-primary waves-effect waves-light" href="/">Zurück zur Startseite</a>
+
+                        @if (Environment.IsDevelopment())
+                        {
+                            <div class="mt-5 alert alert-danger">
+                                @if (!string.IsNullOrEmpty(RequestId))
+                                {
+                                    <h4>Request ID:</h4>
+                                    <code>@RequestId</code>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-xl-6">
+                <div>
+                    <img src="/assets/images/error-img.png" alt="" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    [Parameter] public int? ResponseCode { get; set; }
+    private string? RequestId { get; set; }
+
+    protected override void OnInitialized()
+    {
+        RequestId = Activity.Current?.Id ?? HttpContext?.TraceIdentifier;
+    }
+}

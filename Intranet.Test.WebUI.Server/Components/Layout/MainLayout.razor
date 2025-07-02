@@ -1,0 +1,55 @@
+@inherits LayoutComponentBase
+@inject IJSRuntime JS;
+@inject IWebHostEnvironment Environment;
+@inject NavigationManager NavigationManager;
+
+<!-- Begin page -->
+<BootstrapBlazorRoot>
+    <div id="layout-wrapper">
+
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <ErrorBoundary @ref="errorBoundary" Context="Exception">
+                        <ChildContent>
+                            @Body
+                        </ChildContent>
+                        <ErrorContent>
+                            <div class="alert alert-danger alert-dismissible">
+                                @if (Environment.IsDevelopment())
+                                {
+                                    <span>@Exception.GetType(): @Exception.Message</span>
+                                }
+                                else
+                                {
+                                    <span>Ein Fehler ist aufgetreten. Bitte später noch einmal versuchen.</span>
+                                }
+                                <button class="btn-close" data-bs-dismiss="alert" @onclick="@ClearErrors"></button>
+                            </div>
+                        </ErrorContent>
+                    </ErrorBoundary>
+                </div> <!-- container-fluid -->
+            </div>
+            <!-- End Page-content -->
+        </div>
+        <!-- end main content-->
+    </div>
+</BootstrapBlazorRoot>
+
+@code {
+    private ErrorBoundary errorBoundary;
+
+    protected void ClearErrors()
+    {
+        errorBoundary.Recover();
+        NavigationManager.NavigateTo("/", forceLoad: true);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+        }
+        await base.OnAfterRenderAsync(firstRender);
+    }
+}

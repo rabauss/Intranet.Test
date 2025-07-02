@@ -1,0 +1,16 @@
+services:
+  intranet.text:
+    image: intranet.test:develop
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      - intranetnetwork
+
+networks:
+  intranetnetwork:
+    driver: bridge

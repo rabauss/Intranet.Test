@@ -1,0 +1,23 @@
+@inject IWebHostEnvironment Env
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="utf-8" />
+    <HeadOutlet @rendermode="RenderModeForPage" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <base href="/" />
+    <!-- Bootstrap Css -->
+    <link href="@Assets["_content/BootstrapBlazor.FontAwesome/css/font-awesome.min.css"]" rel="stylesheet" />
+    <link href="@Assets["_content/BootstrapBlazor/css/bootstrap.blazor.bundle.min.css"]" rel="stylesheet" />
+    <link href="@Assets["_content/BootstrapBlazor/css/motronic.min.css"]" rel="stylesheet" />
+    <ImportMap />
+</head>
+
+<body data-sidebar="colored">
+    <Routes @rendermode="RenderModeForPage" />
+
+    <!-- JAVASCRIPT -->
+    <script src="@Assets["_content/BootstrapBlazor/js/bootstrap.blazor.bundle.min.js"]"></script>
+</body>
+</html>
