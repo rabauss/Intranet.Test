@@ -1,0 +1,72 @@
+﻿<MultiSelectGeneric DisplayText="Types"
+                    ShowLabel="true"
+                    Items="_items"
+                    @bind-Value="_value"
+                    ShowSearch="true"
+                    IsClearable="true"
+                    ShowToolbar="true"
+                    OnSearchTextChanged="HandleOnSearchTextChanged"
+                    OnSelectedItemsChanged="HandleOnSelectedItemsChanged" />
+
+@code {
+    private List<ProductCategory>? _value = null;
+    private IEnumerable<SelectedItem<ProductCategory>> _items = Enumerable.Empty<SelectedItem<ProductCategory>>();
+
+    [Parameter] public Func<IEnumerable<SelectedItem<ProductCategory>>?, Task>? OnSelectedItemsChanged { get; set; }
+    [Parameter] public EventCallback<List<ProductCategory>?> ValueChanged { get; set; }
+
+    [Parameter]
+    public List<ProductCategory>? Value
+    {
+        get => _value;
+        set
+        {
+            if (!EqualityComparer<List<ProductCategory>?>.Default.Equals(_value, value))
+            {
+                _value = value;
+
+                if (ValueChanged.HasDelegate)
+                    ValueChanged.InvokeAsync(value);
+                else
+                    StateHasChanged();
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadProductCategoriesAsync();
+    }
+
+    private async Task LoadProductCategoriesAsync()
+    {
+        _items = Enumerable.Empty<SelectedItem<ProductCategory>>();
+        await Task.Delay(100);
+        _items = new List<SelectedItem<ProductCategory>>
+        {
+            new SelectedItem<ProductCategory> { Text = "Electronics", Value = new ProductCategory { Id = 1, Name = "Electronics" } },
+            new SelectedItem<ProductCategory> { Text = "Books", Value = new ProductCategory { Id = 2, Name = "Books" } },
+            new SelectedItem<ProductCategory> { Text = "Home", Value = new ProductCategory { Id = 3, Name = "Home" } }
+        };
+    }
+
+    private IEnumerable<SelectedItem<ProductCategory>> HandleOnSearchTextChanged(string searchText)
+    {
+        return _items.Where(i => (i.Value.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)));
+    }
+
+    private async Task HandleOnSelectedItemsChanged(IEnumerable<SelectedItem<ProductCategory>>? selectedItems)
+    {
+        Value = selectedItems?.Select(x => x.Value).ToList() ?? new List<ProductCategory>();
+        if (OnSelectedItemsChanged != null)
+        {
+            await OnSelectedItemsChanged.Invoke(selectedItems);
+        }
+    }
+
+    public class ProductCategory
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+    }
+}
