@@ -34,7 +34,7 @@
     {
         var electronics = new ProductCategory { Id = 1, Name = "Electronics" };
         selectedCategories ??= new List<ProductCategory>();
-        if (!selectedCategories.Contains(electronics))
+        if (selectedCategories.Find(i => i.Id == electronics.Id) == null)
         {
             selectedCategories.Add(electronics);
             StateHasChanged();
@@ -45,7 +45,7 @@
     {
         if (selectedCategories != null)
         {
-            var electronics = selectedCategories.FirstOrDefault(cat => cat.Name == "Electronics");
+            var electronics = selectedCategories.Find(cat => cat.Id == 1);
             if (electronics != null)
             {
                 selectedCategories.Remove(electronics);

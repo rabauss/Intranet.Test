@@ -3,7 +3,7 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="BootstrapBlazor" Version="9.8.2" />
+    <PackageVersion Include="BootstrapBlazor" Version="9.8.3-beta01" />
     <PackageVersion Include="BootstrapBlazor.FontAwesome" Version="9.1.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="9.0.7" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.WebAssembly" Version="9.0.6" />
